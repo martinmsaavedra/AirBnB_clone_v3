@@ -39,7 +39,7 @@ def post_state():
     '''Post changes in Object state'''
     state_json = request.get_json()
     if not state_json:
-        abort(400, 'Not a Json')
+        abort(400, 'Not a JSON')
     elif state_json.get("name") is None:
         abort(400, 'Missing name')
     else:
@@ -48,7 +48,19 @@ def post_state():
         state_obj = state_obj.to_dict()
         return jsonify(state_obj), 201
 
-
-
-
-    
+@app_views.route('states/<state_id>', methods=['PUT'])
+def put_state(state_id=None):
+    '''Update object state'''
+    state_json = request.get_json()
+    if not state_json:
+        abort(400, 'Not a JSON')
+    else:
+        states = storage.all(State)
+        states = list(obj.to_dict() for obj in states.values())
+        if state_id:
+            for index, state in enumerate(states):
+                if state['id'] == state_id:
+                    state = storage.get(State, state_id)
+                    state.save()
+                    state = state.to_dict()
+                    return jsonify(state), 200
