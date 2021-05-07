@@ -23,7 +23,7 @@ def get_stats():
         "amenities": 'Amenity',
         "cities": 'City',
         'places': 'Place',
-        'state': 'State',
+        'states': 'State',
         'reviews': 'Review',
         'users': "User"
     }
