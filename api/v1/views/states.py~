@@ -1,0 +1,16 @@
+#!/urs/bin/python3
+'''Flask module'''
+
+
+from flask import jsonify
+from models import storage
+from api.v1.views import app_views
+from models.state import State
+
+@app_views.route('/states', methods=['GET'])
+def list_states():
+    states = storage.all(State).to_dict()
+    return jsonify({'hola':'hola'})
+
+
+    
