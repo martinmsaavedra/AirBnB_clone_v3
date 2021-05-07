@@ -1,11 +1,9 @@
 #!/urs/bin/python3
 '''Flask module'''
 
-import collections
 from flask import jsonify, request
 from models import storage
-from api.v1.views import app_views
-from api.v1 import app 
+from api.v1.views import *
 from models.state import State
 
 
