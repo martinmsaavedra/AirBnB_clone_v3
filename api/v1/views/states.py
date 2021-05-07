@@ -16,23 +16,22 @@ def list_states(state_id=None):
     if not state_id:
         return jsonify(states)
     elif state_id != None:
-        for state in states:
-            if state['id'] == state_id:
-                return jsonify(state)
-    abort(404)
+        state = storage.get(State, state_id)
+        if not state:
+            abort(404)
+        return jsonify(state)
+
 
 @app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id=None):
     '''Deletes an states by ID'''
-    states = storage.all(State)
-    states = list(obj.to_dict() for obj in states.values())
-    if state_id:
-        for index, state in enumerate(states):
-            if state['id'] == state_id:
-                state = storage.get(State, state_id)
-                storage.delete(state)
-                return jsonify({}), 200
-    abort(404)
+    state = storage.get(State, state_id)
+
+    if not state:
+        abort(404)
+
+    storage.delete(state)
+    storage.save()
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def post_state():
