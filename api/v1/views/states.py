@@ -1,7 +1,7 @@
 #!/urs/bin/python3
 '''Flask module'''
 
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, make_response
 from models import storage
 from api.v1.views import *
 from models.state import State
@@ -19,19 +19,19 @@ def list_states(state_id=None):
         state = storage.get(State, state_id)
         if not state:
             abort(404)
-        return jsonify(state)
+        return jsonify(state.to_dict())
 
 
 @app_views.route('/states/<state_id>', methods=['DELETE'])
-def delete_state(state_id=None):
+def delete_state(state_id):
     '''Deletes an states by ID'''
     state = storage.get(State, state_id)
-
     if not state:
         abort(404)
-
-    storage.delete(state)
-    storage.save()
+    state.delete()
+    del state
+    return jsonify({}), 200
+    
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def post_state():
@@ -61,6 +61,8 @@ def put_state(state_id=None):
             for index, state in enumerate(states):
                 if state['id'] == state_id:
                     state = storage.get(State, state_id)
+                    for key, value in state_json.items():
+                        setattr(state, key, value)
                     state.save()
                     state = state.to_dict()
                     return jsonify(state), 200
