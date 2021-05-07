@@ -10,7 +10,7 @@ from models.state import State
 
 
 @app_views.route('/states/', methods=['GET'], strict_slashes=False)
-@app_views.route('/states/<state_id>', methods=['GET'], strict_slashes=False)
+@app_views.route('/states/<state_id>', methods=['GET'])
 def list_states(state_id=None):
     '''list states'''
     states = storage.all(State)
@@ -23,7 +23,7 @@ def list_states(state_id=None):
                 return jsonify(state)
     abort(404)
 
-@app_views.route('/states/<state_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id=None):
     '''Deletes an states by ID'''
     states = storage.all(State)
@@ -36,7 +36,7 @@ def delete_state(state_id=None):
                 return jsonify({}), 200
     abort(404)
 
-@app_views.route('/states/', methods=['POST'], strict_slashes=False)
+@app_views.route('/states', methods=['POST'], strict_slashes=False)
 def post_state():
     '''Post changes in Object state'''
     state_json = request.get_json()
