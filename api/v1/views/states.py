@@ -15,7 +15,7 @@ def list_states(state_id=None):
     states = list(obj.to_dict() for obj in states.values())
     if not state_id:
         return jsonify(states)
-    elif state_id != None:
+    elif state_id is not None:
         state = storage.get(State, state_id)
         if not state:
             abort(404)
@@ -33,7 +33,7 @@ def delete_state(state_id):
                 storage.save()
                 return jsonify({}), 200
         abort(404)
-    
+
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def post_state():
@@ -50,6 +50,7 @@ def post_state():
         state_obj = state_obj.to_dict()
         return jsonify(state_obj), 201
     abort(404)
+
 
 @app_views.route('states/<state_id>', methods=['PUT'])
 def put_state(state_id=None):
