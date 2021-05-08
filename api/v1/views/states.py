@@ -45,7 +45,8 @@ def post_state():
         abort(400, 'Missing name')
     else:
         state_obj = State(**state_json)
-        state_obj.save()
+        storage.new(state_obj)
+        storage.save()
         state_obj = state_obj.to_dict()
         return jsonify(state_obj), 201
     abort(404)

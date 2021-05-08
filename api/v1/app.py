@@ -11,8 +11,8 @@ app.register_blueprint(app_views)
 
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
-host = os.getenv('HBNB_API_HOST', '0.0.0.0')
-port = os.getenv('HBNB_API_PORT', 5000)
+my_host = os.getenv('HBNB_API_HOST', '0.0.0.0')
+my_port = os.getenv('HBNB_API_PORT', 5000)
 
 
 @app.teardown_appcontext
@@ -27,4 +27,4 @@ def not_found(error):
 
 if __name__ == "__main__":
     '''Flask App'''
-    app.run(host=host, port=port, threaded=True)
+    app.run(host=my_host, port=my_port, threaded=True)
