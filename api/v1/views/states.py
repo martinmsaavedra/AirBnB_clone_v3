@@ -1,4 +1,4 @@
-#!/urs/bin/python3
+#!/usr/bin/python3
 '''Flask module'''
 
 from api.v1.views import app_views
