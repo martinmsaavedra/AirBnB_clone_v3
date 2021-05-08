@@ -1,9 +1,9 @@
 #!/urs/bin/python3
 '''Flask module'''
 
+from api.v1.views import app_views
 from flask import jsonify, request, abort, make_response
 from models import storage
-from api.v1.views import *
 from models.state import State
 
 
