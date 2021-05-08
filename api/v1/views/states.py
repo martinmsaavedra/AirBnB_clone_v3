@@ -25,12 +25,14 @@ def list_states(state_id=None):
 @app_views.route('/states/<state_id>', methods=['DELETE'])
 def delete_state(state_id):
     '''Deletes an states by ID'''
-    state = storage.get(State, state_id)
-    if not state:
+    state = storage.all(State)
+    if state_id is not None:
+        for key, value in state.items():
+            if state_id == value.id:
+                storage.delete(value)
+                storage.save()
+                return jsonify({}), 200
         abort(404)
-    state.delete()
-    del state
-    return jsonify({}), 200
     
 
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
@@ -54,16 +56,13 @@ def put_state(state_id=None):
     state_json = request.get_json()
     if not state_json:
         abort(400, 'Not a JSON')
-    else:
-        states = storage.all(State)
-        states = list(obj.to_dict() for obj in states.values())
-        if state_id:
-            for index, state in enumerate(states):
-                if state['id'] == state_id:
-                    state = storage.get(State, state_id)
-                    for key, value in state_json.items():
-                        setattr(state, key, value)
-                    state.save()
-                    state = state.to_dict()
-                    return jsonify(state), 200
-    abort(404)
+    elif state_id:
+        state = storage.get(State, state_id)
+        if state:
+            for key, value in state_json.items():
+                setattr(state, key, value)
+            state.save()
+            state = state.to_dict()
+            return jsonify(state), 200
+        else:
+            abort(404)
