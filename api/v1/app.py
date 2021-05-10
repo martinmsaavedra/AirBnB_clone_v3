@@ -1,12 +1,14 @@
 #!/usr/bin/python3
 """Flask Model"""
 from flask import Flask, make_response, jsonify
+from flask_cors import CORS
 from models import storage
 from api.v1.views import app_views
 import os
 
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 app.register_blueprint(app_views)
 
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
