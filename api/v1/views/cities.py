@@ -12,26 +12,19 @@ from models.city import City
                  strict_slashes=False)
 def list_cities(state_id=None):
     '''list states'''
-    states = storage.all(State)
-    states = list(obj.to_dict() for obj in states.values())
-    if not state_id:
+    state = storage.get(State, state_id)
+    if not state:
         abort(404)
-    elif state_id is not None:
-        state = storage.get(State, state_id)
-        cities_list = []
-        for city in state.cities:
-            cities_list.append(city.to_dict())
-        if not state:
-            abort(404)
-        return jsonify(cities_list)
+    cities_list = []
+    for city in state.cities:
+        cities_list.append(city.to_dict())
+    return jsonify(cities_list)
 
 
 @app_views.route('/cities/<city_id>', methods=['GET'],
                  strict_slashes=False)
 def retrieve_city(city_id=None):
     '''Retrieves a City'''
-    if city_id is None:
-        abort(404)
     city = storage.get(City, city_id)
     if city is not None:
         return jsonify(city.to_dict())
