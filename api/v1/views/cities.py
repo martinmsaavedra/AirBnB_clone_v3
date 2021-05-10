@@ -36,8 +36,6 @@ def retrieve_city(city_id=None):
                  strict_slashes=False)
 def delete_city(city_id=None):
     '''Deletes a City Object'''
-    if city_id is None:
-        abort(404)
     city = storage.get(City, city_id)
     if city is not None:
         storage.delete(city)
@@ -51,6 +49,9 @@ def delete_city(city_id=None):
                  strict_slashes=False)
 def create_city(state_id=None):
     '''Creates a City'''
+    state = storage.get(State, state_id)
+    if not state:
+        abort(404)
     city_json = request.get_json()
     if not city_json:
         abort(400, 'Not a JSON')
